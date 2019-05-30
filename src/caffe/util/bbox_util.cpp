@@ -1634,7 +1634,11 @@ void GetLocPredictions(const Dtype* loc_data, const int num,
     }
   }
 #ifdef _OPENMP
-  #pragma omp parallel for collapse(3)
+  #if defined(_MSC_EXTENSIONS)
+    #pragma omp parallel for
+  #else
+    #pragma omp parallel for collapse(3)
+  #endif
 #endif
     for (int i = 0; i < num; ++i) {
       for (int p = 0; p < num_preds_per_class; ++p) {
@@ -1832,7 +1836,11 @@ void GetConfidenceScores(const Dtype* conf_data, const int num,
   conf_preds->resize(num);
   Dtype* buffer = new Dtype[num * num_preds_per_class * num_classes];
 #ifdef _OPENMP
-  #pragma omp parallel for collapse(3)
+  #if defined(_MSC_EXTENSIONS)
+    #pragma omp parallel for
+  #else
+    #pragma omp parallel for collapse(3)
+  #endif
 #endif
   for (int i = 0; i < num; ++i) {
     for (int c = 0; c < num_classes; ++c) {
